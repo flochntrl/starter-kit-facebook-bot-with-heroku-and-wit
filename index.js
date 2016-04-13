@@ -18,3 +18,6 @@ app.listen(app.get('port'), function() {
 });
 
 
+app.get('/webhook', function (req, res) {
+  res.send('Hello World!');
+});
