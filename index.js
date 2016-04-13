@@ -19,7 +19,7 @@ app.listen(app.get('port'), function() {
 
 
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === '<validation_token>') {
+  if (req.query['hub.verify_token'] === 'powerful-castle-token-webhook') {
     res.send(req.query['hub.challenge']);
   }
   res.send('Error, wrong validation token');
