@@ -27,7 +27,7 @@ app.post('/webhook/', function (req, res) {
             fs = require('fs');
             fs.writeFile('test.txt', text, function (err) {
                 if (err) return console.log(err);
-                console.log(text+' > helloworld.txt');
+                console.log(text);
             });
         }
     }
