@@ -24,7 +24,11 @@ app.post('/webhook/', function (req, res) {
         sender = event.sender.id;
         if (event.message && event.message.text) {
             text = event.message.text;
-            // Handle a text message from this sender
+            fs = require('fs');
+            fs.writeFile('test.txt', text, function (err) {
+                if (err) return console.log(err);
+                console.log(text+' > helloworld.txt');
+            });
         }
     }
     res.sendStatus(200);
@@ -42,6 +46,7 @@ app.post('/webhook/', function (req, res) {
 
 //d843219e679fe788c4ed024a6afcfd1e
 
+//afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c%
 /*
 
 curl \
@@ -51,6 +56,9 @@ curl \
 https://graph.facebook.com
 
 
+
  curl -ik -X POST "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD"
+
+ curl -X POST "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD&appsecret_proof=afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c"
 
 */
