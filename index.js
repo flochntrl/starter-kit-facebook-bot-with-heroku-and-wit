@@ -17,10 +17,40 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
+app.post('/webhook/', function (req, res) {
+    messaging_events = req.body.entry[0].messaging;
+    for (i = 0; i < messaging_events.length; i++) {
+        event = req.body.entry[0].messaging[i];
+        sender = event.sender.id;
+        if (event.message && event.message.text) {
+            text = event.message.text;
+            // Handle a text message from this sender
+        }
+    }
+    res.sendStatus(200);
+});
 
-app.get('/webhook/', function (req, res) {
+/*app.get('/webhook/', function (req, res) {
   if (req.query['hub.verify_token'] === 'powerful-castle-token-webhook') {
     res.send(req.query['hub.challenge']);
   }
   res.send('Error, wrong validation token');
-})
+});*/
+
+//CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD
+//ec474466e8e8752a61e22b9de922fa3d
+
+//d843219e679fe788c4ed024a6afcfd1e
+
+/*
+
+curl \
+-F 'access_token=CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD' \
+-F 'appsecret_proof=fbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c%' \
+-F 'batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' \
+https://graph.facebook.com
+
+
+ curl -ik -X POST "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD"
+
+*/
