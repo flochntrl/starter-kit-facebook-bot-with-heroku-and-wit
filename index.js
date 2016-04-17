@@ -48,7 +48,7 @@ app.post('/webhook/', function (req, res) {
 })
 
 var token = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD"
-var appsecret_proof = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
+var var_appsecret_proof = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
 
 function sendTextMessage(sender, text) {
     messageData = {
@@ -56,7 +56,7 @@ function sendTextMessage(sender, text) {
     }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
+        qs: {access_token:token, appsecret_proof: var_appsecret_proof},
         method: 'POST',
         json: {
             recipient: {id:sender},
