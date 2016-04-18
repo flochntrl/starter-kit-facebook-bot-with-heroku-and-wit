@@ -152,7 +152,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     // Parsing the Messenger API response
     var messaging = getFirstMessagingEntry(req.body);
-    throw new Error('here');
+    
     if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
     // Yay! We got a new message!
 
