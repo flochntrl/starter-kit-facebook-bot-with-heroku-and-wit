@@ -1,5 +1,3 @@
-'use strict';
-
 var bodyParser = require('body-parser');
 var express = require('express');
 var request = require('request');
@@ -152,7 +150,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     // Parsing the Messenger API response
     var messaging = getFirstMessagingEntry(req.body);
-    
+
     if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
     // Yay! We got a new message!
 
