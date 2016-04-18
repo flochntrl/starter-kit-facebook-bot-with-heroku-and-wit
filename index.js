@@ -11,19 +11,14 @@ var WIT_TOKEN = "4YKLYVNWTL2DG2HPWTDX4LKNC5DZXUW7";
 
 // Messenger API parameters
 var FB_PAGE_ID = "216186221848981" && Number("216186221848981");
-if (!FB_PAGE_ID) {
+/*if (!FB_PAGE_ID) {
     throw new Error('missing FB_PAGE_ID');
-}
+}*/
 var FB_PAGE_TOKEN = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD";
-if (!FB_PAGE_TOKEN) {
-    throw new Error('missing FB_PAGE_TOKEN');
-}
 var APP_SECRET_PROOF = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
 
 // Messenger API specific code
 
-// See the Send API reference
-// https://developers.facebook.com/docs/messenger-platform/send-api-reference
 var fbReq = request.defaults({
     uri: 'https://graph.facebook.com/me/messages',
     method: 'POST',
@@ -152,57 +147,57 @@ app.post('/webhook/', function (req, res) {
     var messaging = getFirstMessagingEntry(req.body);
 
     if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
-    // Yay! We got a new message!
+        // Yay! We got a new message!
 
-    // We retrieve the Facebook user ID of the sender
-    var sender = messaging.sender.id;
+        // We retrieve the Facebook user ID of the sender
+        var sender = messaging.sender.id;
 
-    // We retrieve the user's current session, or create one if it doesn't exist
-    // This is needed for our bot to figure out the conversation history
-    var sessionId = findOrCreateSession(sender);
+        // We retrieve the user's current session, or create one if it doesn't exist
+        // This is needed for our bot to figure out the conversation history
+        var sessionId = findOrCreateSession(sender);
 
-    // We retrieve the message content
-    var msg = messaging.message.text;
-    var atts = messaging.message.attachments;
+        // We retrieve the message content
+        var msg = messaging.message.text;
+        var atts = messaging.message.attachments;
 
-    if (atts) {
-        // We received an attachment
+        if (atts) {
+            // We received an attachment
 
-        // Let's reply with an automatic message
-        fbMessage(
-            sender,
-            'Sorry I can only process text messages for now.'
-        );
-    } else if (msg) {
-        // We received a text message
+            // Let's reply with an automatic message
+            fbMessage(
+                sender,
+                'Sorry I can only process text messages for now.'
+            );
+        } else if (msg) {
+            // We received a text message
 
-        // Let's forward the message to the Wit.ai Bot Engine
-        // This will run all actions until our bot has nothing left to do
-        wit.runActions(
-            sessionId, // the user's current session
-            msg, // the user's message
-            sessions[sessionId].context, // the user's current session state
-            function (error, context) {
-            if (error) {
-                console.log('Oops! Got an error from Wit:', error);
-            } else {
-                // Our bot did everything it has to do.
-                // Now it's waiting for further messages to proceed.
-                console.log('Waiting for futher messages.');
+            // Let's forward the message to the Wit.ai Bot Engine
+            // This will run all actions until our bot has nothing left to do
+            wit.runActions(
+                sessionId, // the user's current session
+                msg, // the user's message
+                sessions[sessionId].context, // the user's current session state
+                function (error, context) {
+                    if (error) {
+                        console.log('Oops! Got an error from Wit:', error);
+                    } else {
+                        // Our bot did everything it has to do.
+                        // Now it's waiting for further messages to proceed.
+                        console.log('Waiting for futher messages.');
 
-        // Based on the session state, you might want to reset the session.
-        // This depends heavily on the business logic of your bot.
-        // Example:
-        // if (context['done']) {
-        //   delete sessions[sessionId];
-        // }
+                        // Based on the session state, you might want to reset the session.
+                        // This depends heavily on the business logic of your bot.
+                        // Example:
+                        // if (context['done']) {
+                        //   delete sessions[sessionId];
+                        // }
 
-        // Updating the user's current session state
-        sessions[sessionId].context = context;
+                        // Updating the user's current session state
+                        sessions[sessionId].context = context;
+                    }
+                }
+            );
+        }
     }
-    }
-    );
-    }
-}
-res.sendStatus(200);
+    res.sendStatus(200);
 });
