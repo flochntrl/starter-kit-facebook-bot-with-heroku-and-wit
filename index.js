@@ -1,32 +1,32 @@
 'use strict';
 
-const bodyParser = require('body-parser');
-const express = require('express');
-const request = require('request');
-const Wit = require('node-wit').Wit;
+var bodyParser = require('body-parser');
+var express = require('express');
+var request = require('request');
+var Wit = require('node-wit').Wit;
 
 // Webserver parameter
-const PORT = process.env.PORT || 5000;
+var PORT = process.env.PORT || 5000;
 
 // Wit.ai parameters
-const WIT_TOKEN = "4YKLYVNWTL2DG2HPWTDX4LKNC5DZXUW7";
+var WIT_TOKEN = "4YKLYVNWTL2DG2HPWTDX4LKNC5DZXUW7";
 
 // Messenger API parameters
-const FB_PAGE_ID = "216186221848981" && Number("216186221848981");
+var FB_PAGE_ID = "216186221848981" && Number("216186221848981");
 if (!FB_PAGE_ID) {
     throw new Error('missing FB_PAGE_ID');
 }
-const FB_PAGE_TOKEN = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD";
+var FB_PAGE_TOKEN = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD";
 if (!FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
 }
-const APP_SECRET_PROOF = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
+var APP_SECRET_PROOF = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
 
 // Messenger API specific code
 
 // See the Send API reference
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference
-const fbReq = request.defaults({
+var fbReq = request.defaults({
     uri: 'https://graph.facebook.com/me/messages',
     method: 'POST',
     json: true,
@@ -34,8 +34,8 @@ const fbReq = request.defaults({
     headers: {'Content-Type': 'application/json'}
 });
 
-const fbMessage = function(recipientId, msg, cb) {
-    const opts = {
+var fbMessage = function(recipientId, msg, cb) {
+    var opts = {
         form: {
             recipient: {
                 id: recipientId
@@ -54,8 +54,8 @@ const fbMessage = function(recipientId, msg, cb) {
 
 // See the Webhook reference
 // https://developers.facebook.com/docs/messenger-platform/webhook-reference
-const getFirstMessagingEntry = function(body) {
-    const val = body.object == 'page' &&
+var getFirstMessagingEntry = function(body) {
+    var val = body.object == 'page' &&
             body.entry &&
             Array.isArray(body.entry) &&
             body.entry.length > 0 &&
@@ -74,9 +74,9 @@ const getFirstMessagingEntry = function(body) {
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
-const sessions = {};
+var sessions = {};
 
-const findOrCreateSession = function(fbid) {
+var findOrCreateSession = function(fbid) {
     var sessionId;
     // Let's see if we already have a session for the user fbid
     Object.keys(sessions).forEach(function(k) {
@@ -94,11 +94,11 @@ const findOrCreateSession = function(fbid) {
 };
 
 // Our bot actions
-const actions = {
+var actions = {
         say: function(sessionId, context, message, cb) {
             // Our bot has something to say!
             // Let's retrieve the Facebook user whose session belongs to
-            const recipientId = sessions[sessionId].fbid;
+            var recipientId = sessions[sessionId].fbid;
             if (recipientId) {
                 // Yay, we found our recipient!
                 // Let's forward our bot response to her.
@@ -132,10 +132,10 @@ const actions = {
 };
 
 // Setting up our bot
-const wit = new Wit(WIT_TOKEN, actions);
+var wit = new Wit(WIT_TOKEN, actions);
 
 // Starting our webserver and putting it all together
-const app = express();
+var app = express();
 app.set('port', PORT);
 app.listen(app.get('port'));
 app.use(bodyParser.json());
@@ -151,21 +151,21 @@ app.get('/webhook/', function (req, res) {
 // Message handler
 app.post('/webhook/', function (req, res) {
     // Parsing the Messenger API response
-    const messaging = getFirstMessagingEntry(req.body);
+    var messaging = getFirstMessagingEntry(req.body);
     throw new Error('here');
     if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
     // Yay! We got a new message!
 
     // We retrieve the Facebook user ID of the sender
-    const sender = messaging.sender.id;
+    var sender = messaging.sender.id;
 
     // We retrieve the user's current session, or create one if it doesn't exist
     // This is needed for our bot to figure out the conversation history
-    const sessionId = findOrCreateSession(sender);
+    var sessionId = findOrCreateSession(sender);
 
     // We retrieve the message content
-    const msg = messaging.message.text;
-    const atts = messaging.message.attachments;
+    var msg = messaging.message.text;
+    var atts = messaging.message.attachments;
 
     if (atts) {
         // We received an attachment
