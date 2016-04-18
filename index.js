@@ -20,7 +20,7 @@ const FB_PAGE_TOKEN = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAU
 if (!FB_PAGE_TOKEN) {
     throw new Error('missing FB_PAGE_TOKEN');
 }
-const FB_VERIFY_TOKEN = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
+const APP_SECRET_PROOF = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
 
 // Messenger API specific code
 
@@ -30,7 +30,7 @@ const fbReq = request.defaults({
     uri: 'https://graph.facebook.com/me/messages',
     method: 'POST',
     json: true,
-    qs: {access_token:FB_PAGE_TOKEN, appsecret_proof: FB_VERIFY_TOKEN},
+    qs: {access_token:FB_PAGE_TOKEN, appsecret_proof: APP_SECRET_PROOF},
     headers: {'Content-Type': 'application/json'}
 });
 
@@ -96,39 +96,39 @@ const findOrCreateSession = function(fbid) {
 // Our bot actions
 const actions = {
         say: function(sessionId, context, message, cb) {
-        // Our bot has something to say!
-        // Let's retrieve the Facebook user whose session belongs to
-        const recipientId = sessions[sessionId].fbid;
-if (recipientId) {
-    // Yay, we found our recipient!
-    // Let's forward our bot response to her.
-    fbMessage(recipientId, message, function(err, data) {
-        if (err) {
-            console.log(
-                'Oops! An error occurred while forwarding the response to',
-                recipientId,
-                ':',
-                err
-            );
-        }
+            // Our bot has something to say!
+            // Let's retrieve the Facebook user whose session belongs to
+            const recipientId = sessions[sessionId].fbid;
+            if (recipientId) {
+                // Yay, we found our recipient!
+                // Let's forward our bot response to her.
+                fbMessage(recipientId, message, function(err, data) {
+                    if (err) {
+                        console.log(
+                            'Oops! An error occurred while forwarding the response to',
+                            recipientId,
+                            ':',
+                            err
+                        );
+                    }
 
-        // Let's give the wheel back to our bot
-        cb();
-});
-} else {
-    console.log('Oops! Couldn\'t find user for session:', sessionId);
-    // Giving the wheel back to our bot
-    cb();
-}
-},
-merge: function(sessionId, context, entities, message, cb) {
-    cb(context);
-},
-error: function(sessionId, context, error) {
-    console.log(error.message);
-},
-// You should implement your custom actions here
-// See https://wit.ai/docs/quickstart
+                    // Let's give the wheel back to our bot
+                    cb();
+                });
+            } else {
+                console.log('Oops! Couldn\'t find user for session:', sessionId);
+                // Giving the wheel back to our bot
+                cb();
+            }
+        },
+        merge: function(sessionId, context, entities, message, cb) {
+            cb(context);
+        },
+        error: function(sessionId, context, error) {
+            console.log(error.message);
+        }
+        // You should implement your custom actions here
+        // See https://wit.ai/docs/quickstart
 };
 
 // Setting up our bot
@@ -146,13 +146,14 @@ app.get('/webhook/', function (req, res) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
-})
+});
 
 // Message handler
 app.post('/webhook/', function (req, res) {
     // Parsing the Messenger API response
     const messaging = getFirstMessagingEntry(req.body);
-if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
+    throw new Error('here');
+    if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
     // Yay! We got a new message!
 
     // We retrieve the Facebook user ID of the sender
