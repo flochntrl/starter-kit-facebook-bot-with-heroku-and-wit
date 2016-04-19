@@ -7,15 +7,26 @@ var Wit = require('node-wit').Wit;
 var PORT = process.env.PORT || 5000;
 
 // Wit.ai parameters
-var WIT_TOKEN = "4YKLYVNWTL2DG2HPWTDX4LKNC5DZXUW7";
+var WIT_TOKEN = process.env.WIT_TOKEN;
+if (!WIT_TOKEN) {
+    throw new Error('missing WIT_TOKEN');
+}
 
 // Messenger API parameters
-var FB_PAGE_ID = "216186221848981" && Number("216186221848981");
-/*if (!FB_PAGE_ID) {
+var FB_PAGE_ID = process.env.FB_PAGE_ID && Number(process.env.FB_PAGE_ID);
+if (!FB_PAGE_ID) {
     throw new Error('missing FB_PAGE_ID');
-}*/
-var FB_PAGE_TOKEN = "CAADLHsVnmpoBADdMaPIzyCUm1Jc9AcnK677v2WJQKjdHj1NGlSlUWBAUh8MOVBIrNqAtcYVlzvVXPH08ODqjSEHhvgZCuDsZCl6iWQbidgXe882f42YnrlxLiRLKtHR8CniJtweaSTXmWovtYn6ZArZCeblzHQbwCjJCDrfbh5E2zqkMAHKoVDArXDQOCroZD";
-var APP_SECRET_PROOF = "afbc5f280479fc8e69794302844064f6ab70e42292962dc6f9df2a47581ed14c";
+}
+
+var FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN;
+if (!FB_PAGE_TOKEN) {
+    throw new Error('missing FB_PAGE_TOKEN');
+}
+
+var APP_SECRET_PROOF = process.env.APP_SECRET_PROOF;
+if (!APP_SECRET_PROOF) {
+    throw new Error('missing APP_SECRET_PROOF');
+}
 
 // Messenger API specific code
 
