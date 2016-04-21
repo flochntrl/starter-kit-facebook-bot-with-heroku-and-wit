@@ -28,6 +28,11 @@ if (!APP_SECRET_PROOF) {
     throw new Error('missing APP_SECRET_PROOF');
 }
 
+var VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+if (!VERIFY_TOKEN) {
+    throw new Error('missing VERIFY_TOKEN');
+}
+
 // Messenger API specific code
 
 var fbReq = request.defaults({
@@ -85,10 +90,10 @@ var findOrCreateSession = function(fbid) {
     // Let's see if we already have a session for the user fbid
     Object.keys(sessions).forEach(function(k) {
         if (sessions[k].fbid === fbid) {
-        // Yep, got it!
-        sessionId = k;
-    }
-});
+            // Yep, got it!
+            sessionId = k;
+        }
+    });
     if (!sessionId) {
         // No session found for user fbid, let's create a new one
         sessionId = new Date().toISOString();
@@ -146,7 +151,7 @@ app.use(bodyParser.json());
 
 // Webhook setup
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'powerful-castle-token-webhook') {
+    if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
