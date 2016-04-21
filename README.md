@@ -38,7 +38,7 @@ $ heroku git:remote -a your-heroku-app
   
     - WIT_TOKEN
     - FB_PAGE_ID
-    - FB_PAGE_TOKEN FB_PAGE_TOKEN
+    - FB_PAGE_TOKEN 
     - APP_SECRET_PROOF
 
 # Talk to your bot on Messenger!
